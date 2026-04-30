@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Models;
 using Assets.Scripts.ScriptableObjects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Components
 {
@@ -16,11 +18,16 @@ namespace Assets.Scripts.Components
         private DeffenseComponent _deffenseComponent;
         private Rigidbody2D _rigidBody;
         private SpriteRenderer _spriteRenderer;
+        private Transform _transform;
         private float _moveInput;
         private bool _isGrounded;
         private float _jumpBufferCounter;
         private bool _facingRight = true;
         private Dictionary<Elements, Sprite> _sprites;
+
+        [Header("Level Settings")]
+        [SerializeField]
+        private Vector3 _spawn;
 
         [Header("Movement")]
         [SerializeField]
@@ -54,7 +61,12 @@ namespace Assets.Scripts.Components
 
         [Header("Achievements")]
         [SerializeField]
-        private Achievement _firstDeathAchievement = null;
+        private Achievement _firstDeathAchievement;
+
+        public void UpdateSpawn(Vector3 spawn)
+        {
+            Repository.SetData<PlayerData>(new() { Spawn = spawn });
+        }
 
         private void Start()
         {
@@ -63,9 +75,19 @@ namespace Assets.Scripts.Components
             _rigidBody = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _sprites = new(_spritesSource.Select(p => new KeyValuePair<Elements, Sprite>(p.Key, p.Value)));
+
+            if (Repository.TryGetData<PlayerData>(out var data))
+            {
+                Debug.Log(data.Spawn.ToString());
+                transform.position = data.Spawn;
+            }
         }
         private void Update()
         {
+            if (Time.timeScale < 1) return;
+
+            if (transform.position.y < -10) CharacterDeath();
+
             _moveInput = Input.GetAxisRaw("Horizontal");
 
             _isGrounded = Physics2D.OverlapCircle(
@@ -97,6 +119,8 @@ namespace Assets.Scripts.Components
 
         private void FixedUpdate()
         {
+            if (Time.timeScale < 1) return;
+
             _rigidBody.linearVelocityX = _moveInput * _moveSpeed;
 
             if (_jumpBufferCounter > 0 && _isGrounded)
@@ -159,12 +183,11 @@ namespace Assets.Scripts.Components
 
         private void CharacterDeath()
         {
-            if (_firstDeathAchievement != null)
+            if (!AchievementsStorage.Check(_firstDeathAchievement))
             {
                 AchievementsStorage.Add(_firstDeathAchievement);
-                _firstDeathAchievement = null;
             }
-            Destroy(gameObject);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

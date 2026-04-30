@@ -8,6 +8,10 @@ namespace Assets.Scripts.Components
     public class EnemyComponent : MonoBehaviour
     {
         private DeffenseComponent _deffenceComponent;
+
+        [SerializeField]
+        private RectTransform _ui;
+
         [Header("Patrol")]
         [SerializeField] private Transform leftPoint;
         [SerializeField] private Transform rightPoint;
@@ -23,6 +27,7 @@ namespace Assets.Scripts.Components
         [SerializeField] private Transform firePoint;
         [SerializeField] private float projectileSpeed = 7f;
         [SerializeField] private float shootCooldown = 1f;
+        [SerializeField] private float firePointRadious = 2f;
 
         private Rigidbody2D rb;
         private Transform player;
@@ -39,6 +44,8 @@ namespace Assets.Scripts.Components
 
         private void Update()
         {
+            if (Time.timeScale < 1) return; 
+
             CheckPlayerVisibility();
 
             if (isPlayerVisible)
@@ -62,22 +69,21 @@ namespace Assets.Scripts.Components
 
         private void CheckPlayerVisibility()
         {
-            isPlayerVisible = false;
-            player = null;
-
-            Vector2 direction = movingRight ? Vector2.right : Vector2.left;
-
-            RaycastHit2D hit = Physics2D.Raycast(
+            var hit = Physics2D.OverlapCircle(
                 visionPoint.position,
-                direction,
                 visionDistance,
                 playerLayer
             );
 
-            if (hit.collider != null)
+            if (hit != null)
             {
                 isPlayerVisible = true;
                 player = hit.transform;
+            }
+            else
+            {
+                isPlayerVisible = false;
+                player = null;
             }
         }
 
@@ -125,13 +131,14 @@ namespace Assets.Scripts.Components
         {
             if (projectilePrefab == null || firePoint == null) return;
 
-            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+            var direction = (player.position - firePoint.position).normalized;
+
+            GameObject projectile = Instantiate(projectilePrefab, firePoint.position + direction * firePointRadious, Quaternion.identity);
 
             Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
             if (projectileRb != null)
             {
-                float direction = movingRight ? 1f : -1f;
-                projectileRb.linearVelocity = new Vector2(direction * projectileSpeed, 0f);
+                projectileRb.linearVelocity = new Vector2(direction.x, direction.y).normalized * projectileSpeed;
             }
         }
 
@@ -140,6 +147,10 @@ namespace Assets.Scripts.Components
             Vector3 scale = transform.localScale;
             scale.x = Mathf.Abs(scale.x) * (faceRight ? 1f : -1f);
             transform.localScale = scale;
+
+            scale = _ui.localScale;
+            scale.x = Mathf.Abs(scale.x) * (faceRight ? 1f : -1f);
+            _ui.localScale = scale;
         }
     }
 }

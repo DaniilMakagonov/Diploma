@@ -7,5 +7,6 @@ namespace Assets.Scripts.Data
     public class SaverData
     {
         public int Id;
+        public string SceneName;
     }
 }

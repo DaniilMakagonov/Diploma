@@ -26,5 +26,10 @@ namespace Assets.Scripts.Data
             _achievements.Add(achievement);
             Save();
         }
+
+        public static bool Check(Achievement achievement)
+        {
+            return _achievements.Contains(achievement);
+        }
     }
 }

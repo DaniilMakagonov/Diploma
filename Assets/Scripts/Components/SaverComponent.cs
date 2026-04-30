@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Data;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Components
 {
@@ -8,22 +9,36 @@ namespace Assets.Scripts.Components
     public class SaverComponent : MonoBehaviour
     {
         [SerializeField] private int _id;
-        private bool _isUsed;
+        [SerializeField]
+        private SpriteRenderer _sprite;
+        private bool _isUsed = false;
 
         private void Start()
         {
             _isUsed = Repository.TryGetData<SaverData>(out var data) && data.Id <= _id;
-        }
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (collision.gameObject.TryGetComponent<MainCharacterComponent>(out _) && !_isUsed)
+            if (_isUsed)
             {
-                _isUsed = true;
-                Repository.SetData<SaverData>(new() { Id = _id });
-                Repository.SaveState();
+                _sprite.color = Color.green;
             }
         }
 
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.TryGetComponent<MainCharacterComponent>(out var character) && !_isUsed)
+            {
+                _isUsed = true;
+                Debug.Log(transform.position.ToString());
+                character.UpdateSpawn(transform.position);
 
+                Repository.SetData<SaverData>(new()
+                {
+                    Id = _id,
+                    SceneName = SceneManager.GetActiveScene().name,
+                });
+                Repository.SaveState();
+
+                _sprite.color = Color.green;
+            }
+        }
     }
 }

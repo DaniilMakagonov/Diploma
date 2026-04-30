@@ -5,8 +5,17 @@ using UnityEngine;
 
 public class DeffenseComponent : MonoBehaviour
 {
-    [SerializeField]
-    private int _maxHealth;
+    public event Action<Elements> OnElementChanged;
+    [field: SerializeField]
+    public int MaxHealth {  get; private set; }
+
+    public int Health
+    {
+        get
+        {
+            return _health.Health;
+        }
+    }
 
     [SerializeField]
     private Element _deffenseElement;
@@ -16,12 +25,16 @@ public class DeffenseComponent : MonoBehaviour
     public Element DeffenseElement
     {
         get => _deffenseElement;
-        set => _deffenseElement = value;
+        set
+        {
+            _deffenseElement = value;
+            OnElementChanged?.Invoke(_deffenseElement.Type);
+        }
     }
 
     private void Awake()
     {
-        _health = new(_maxHealth);
+        _health = new(MaxHealth);
 
     }
 

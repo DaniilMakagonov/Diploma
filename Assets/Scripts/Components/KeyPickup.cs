@@ -7,7 +7,7 @@ public class KeyPickup : MonoBehaviour
     private string _name;
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerKeyInventory inventory = other.GetComponent<PlayerKeyInventory>();
+        PlayerKeyInventoryComponent inventory = other.GetComponent<PlayerKeyInventoryComponent>();
 
         if (inventory != null)
         {

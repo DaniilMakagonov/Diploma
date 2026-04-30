@@ -23,7 +23,6 @@ namespace Assets.Scripts.Components
         [SerializeField] private float moveSpeed = 5f;
 
         [Header("Damage")]
-        [SerializeField] private int damage = 1;
         [SerializeField] private LayerMask playerLayer;
         [SerializeField] private float damageCooldown = 1f;
 
