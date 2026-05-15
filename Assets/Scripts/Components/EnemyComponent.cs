@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.ScriptableObjects;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Components
@@ -13,21 +15,36 @@ namespace Assets.Scripts.Components
         private RectTransform _ui;
 
         [Header("Patrol")]
-        [SerializeField] private Transform leftPoint;
-        [SerializeField] private Transform rightPoint;
-        [SerializeField] private float moveSpeed = 2f;
+        [SerializeField]
+        private Transform leftPoint;
+        [SerializeField]
+        private Transform rightPoint;
+        [SerializeField]
+        private float moveSpeed = 2f;
 
         [Header("Vision")]
-        [SerializeField] private Transform visionPoint;
-        [SerializeField] private float visionDistance = 8f;
-        [SerializeField] private LayerMask playerLayer;
+        [SerializeField]
+        private Transform visionPoint;
+        [SerializeField]
+        private float visionDistance = 8f;
+        [SerializeField]
+        private LayerMask playerLayer;
 
         [Header("Shooting")]
-        [SerializeField] private GameObject projectilePrefab;
-        [SerializeField] private Transform firePoint;
-        [SerializeField] private float projectileSpeed = 7f;
-        [SerializeField] private float shootCooldown = 1f;
-        [SerializeField] private float firePointRadious = 2f;
+        [SerializeField]
+        private GameObject projectilePrefab;
+        [SerializeField]
+        private Transform firePoint;
+        [SerializeField]
+        private float projectileSpeed = 7f;
+        [SerializeField]
+        private float shootCooldown = 1f;
+        [SerializeField]
+        private float firePointRadious = 2f;
+
+        [Header("Achievements")]
+        [SerializeField]
+        private Achievement _firstEnemyDefeatAchievement;
 
         private Rigidbody2D rb;
         private Transform player;
@@ -37,7 +54,7 @@ namespace Assets.Scripts.Components
         private void Start()
         {
             _deffenceComponent = GetComponent<DeffenseComponent>();
-            _deffenceComponent.SubscribeOnDeath(() => Destroy(gameObject));
+            _deffenceComponent.SubscribeOnDeath(OnDeath);
 
             rb = GetComponent<Rigidbody2D>();
         }
@@ -151,6 +168,16 @@ namespace Assets.Scripts.Components
             scale = _ui.localScale;
             scale.x = Mathf.Abs(scale.x) * (faceRight ? 1f : -1f);
             _ui.localScale = scale;
+        }
+
+        private void OnDeath()
+        {
+            if (!AchievementsStorage.Check(_firstEnemyDefeatAchievement))
+            {
+                AchievementsStorage.Add(_firstEnemyDefeatAchievement);
+            }
+
+            Destroy(gameObject);
         }
     }
 }

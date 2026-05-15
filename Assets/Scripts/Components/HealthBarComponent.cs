@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Components
 {
-    [RequireComponent(typeof(DeffenseComponent))]
     public class HealthBarComponent : MonoBehaviour
     {
         [SerializeField] private DeffenseComponent _deffence;

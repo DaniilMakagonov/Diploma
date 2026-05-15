@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6939713216457958600}
   - component: {fileID: 1704069011813259492}
   - component: {fileID: 5745025627927243333}
+  - component: {fileID: 939399514731673753}
   m_Layer: 0
   m_Name: Health Bar
   m_TagString: Untagged
@@ -177,6 +178,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &939399514731673753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2684082248330592088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6290d9e093c5fe49b5b5eb252da5303, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Components.HealthBarComponent
+  _deffence: {fileID: 0}
+  _greenTransform: {fileID: 4451708853871140188}
+  _textValue: {fileID: 7014528984820843717}
 --- !u!1 &6103243221272059677
 GameObject:
   m_ObjectHideFlags: 0

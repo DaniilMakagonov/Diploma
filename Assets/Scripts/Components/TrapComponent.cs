@@ -6,9 +6,6 @@ namespace Assets.Scripts.Components
     [RequireComponent(typeof(BoxCollider2D))]
     public class TrapComponent : MonoBehaviour
     {
-        [SerializeField]
-        private Attack _attack;
-
         private enum SpikeState
         {
             Hidden,
@@ -18,65 +15,74 @@ namespace Assets.Scripts.Components
         }
 
         [Header("Timing")]
-        [SerializeField] private float hiddenTime = 2f;
-        [SerializeField] private float activeTime = 2f;
-        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] 
+        private float _hiddenTime = 2f;
+        [SerializeField] 
+        private float _activeTime = 2f;
+        [SerializeField] 
+        private float _moveSpeed = 5f;
 
         [Header("Damage")]
-        [SerializeField] private LayerMask playerLayer;
-        [SerializeField] private float damageCooldown = 1f;
+        [SerializeField] 
+        private LayerMask _playerLayer;
+        [SerializeField] 
+        private float _damageCooldown = 1f;
+        [SerializeField]
+        private Attack _attack;
 
         [Header("Positions")]
-        [SerializeField] private Transform hiddenPoint;
-        [SerializeField] private Transform activePoint;
+        [SerializeField] 
+        private Transform _hiddenPoint;
+        [SerializeField] 
+        private Transform _activePoint;
 
-        private SpikeState currentState = SpikeState.Hidden;
-        private float timer;
-        private float damageTimer;
+        private SpikeState _currentState = SpikeState.Hidden;
+        private float _timer;
+        private float _damageTimer;
 
         private void Start()
         {
-            transform.position = hiddenPoint.position;
-            timer = hiddenTime;
+            transform.position = _hiddenPoint.position;
+            _timer = _hiddenTime;
         }
 
         private void Update()
         {
-            switch (currentState)
+            switch (_currentState)
             {
                 case SpikeState.Hidden:
-                    timer -= Time.deltaTime;
-                    if (timer <= 0f)
+                    _timer -= Time.deltaTime;
+                    if (_timer <= 0f)
                     {
-                        currentState = SpikeState.Rising;
+                        _currentState = SpikeState.Rising;
                     }
                     break;
 
                 case SpikeState.Rising:
-                    MoveTowards(activePoint.position);
+                    MoveTowards(_activePoint.position);
 
-                    if (Vector2.Distance(transform.position, activePoint.position) < 0.05f)
+                    if (Vector2.Distance(transform.position, _activePoint.position) < 0.05f)
                     {
-                        currentState = SpikeState.Active;
-                        timer = activeTime;
+                        _currentState = SpikeState.Active;
+                        _timer = _activeTime;
                     }
                     break;
 
                 case SpikeState.Active:
-                    timer -= Time.deltaTime;
-                    if (timer <= 0f)
+                    _timer -= Time.deltaTime;
+                    if (_timer <= 0f)
                     {
-                        currentState = SpikeState.Lowering;
+                        _currentState = SpikeState.Lowering;
                     }
                     break;
 
                 case SpikeState.Lowering:
-                    MoveTowards(hiddenPoint.position);
+                    MoveTowards(_hiddenPoint.position);
 
-                    if (Vector2.Distance(transform.position, hiddenPoint.position) < 0.05f)
+                    if (Vector2.Distance(transform.position, _hiddenPoint.position) < 0.05f)
                     {
-                        currentState = SpikeState.Hidden;
-                        timer = hiddenTime;
+                        _currentState = SpikeState.Hidden;
+                        _timer = _hiddenTime;
                     }
                     break;
             }
@@ -87,19 +93,19 @@ namespace Assets.Scripts.Components
             transform.position = Vector2.MoveTowards(
                 transform.position,
                 target,
-                moveSpeed * Time.deltaTime
+                _moveSpeed * Time.deltaTime
             );
         }
 
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (currentState != SpikeState.Active) return;
+            if (_currentState != SpikeState.Active) return;
 
-            if (((1 << other.gameObject.layer) & playerLayer) != 0)
+            if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
-                damageTimer -= Time.deltaTime;
+                _damageTimer -= Time.deltaTime;
 
-                if (damageTimer <= 0f)
+                if (_damageTimer <= 0f)
                 {
                     var health = other.GetComponent<DeffenseComponent>();
 
@@ -108,7 +114,7 @@ namespace Assets.Scripts.Components
                         health.GetDamage(_attack);
                         Debug.Log($"attacked from trap with damage {_attack.Damage}");
                     }
-                    damageTimer = damageCooldown;
+                    _damageTimer = _damageCooldown;
                 }
             }
         }

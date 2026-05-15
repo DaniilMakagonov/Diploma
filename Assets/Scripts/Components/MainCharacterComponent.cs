@@ -18,12 +18,12 @@ namespace Assets.Scripts.Components
         private DeffenseComponent _deffenseComponent;
         private Rigidbody2D _rigidBody;
         private SpriteRenderer _spriteRenderer;
-        private Transform _transform;
         private float _moveInput;
         private bool _isGrounded;
         private float _jumpBufferCounter;
         private bool _facingRight = true;
         private Dictionary<Elements, Sprite> _sprites;
+        private float _shootTimer;
 
         [Header("Level Settings")]
         [SerializeField]
@@ -34,6 +34,8 @@ namespace Assets.Scripts.Components
         private float _moveSpeed = 6f;
         [SerializeField]
         private float _jumpForce = 12f;
+        [SerializeField]
+        private float _jumpBufferTime = 0.15f;
 
         [Header("Ground Check")]
         [SerializeField]
@@ -43,10 +45,6 @@ namespace Assets.Scripts.Components
         [SerializeField]
         private LayerMask _groundLayer;
 
-        [Header("Jump Tuning")]
-        [SerializeField]
-        private float _jumpBufferTime = 0.15f;
-
         [Header("Attack")]
         [SerializeField]
         private GameObject _bullet;
@@ -54,6 +52,8 @@ namespace Assets.Scripts.Components
         private Transform _firePoint;
         [SerializeField]
         private float _bulletSpeed = 10f;
+        [SerializeField]
+        private float _shootCooldown = 1f;
         [SerializeField]
         private List<KeyValue<Elements, Sprite>> _spritesSource;
         [SerializeField]
@@ -87,6 +87,8 @@ namespace Assets.Scripts.Components
             if (Time.timeScale < 1) return;
 
             if (transform.position.y < -10) CharacterDeath();
+
+            _shootTimer -= Time.deltaTime;
 
             _moveInput = Input.GetAxisRaw("Horizontal");
 
@@ -143,6 +145,8 @@ namespace Assets.Scripts.Components
 
         private void Shoot()
         {
+            if (_shootTimer > 0) return;
+
             var bullet = Instantiate(_bullet, _firePoint.position, Quaternion.identity);
 
             var bulletComponent = bullet.GetComponent<BulletComponent>();
@@ -159,6 +163,8 @@ namespace Assets.Scripts.Components
             var bulletRigidbody = bullet.GetComponent<Rigidbody2D>();
             var direction = _facingRight ? 1f : -1f;
             bulletRigidbody.linearVelocityX = direction * _bulletSpeed;
+
+            _shootTimer = _shootCooldown;
         }
 
         private void CheckElementChange()
