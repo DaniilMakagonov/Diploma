@@ -15,7 +15,8 @@ namespace Assets.Scripts.Components
 
         private void Start()
         {
-            _isUsed = Repository.TryGetData<SaverData>(out var data) && data.Id <= _id;
+            _isUsed = Repository.TryGetData<SaverData>(out var data) && data.Id >= _id;
+
             if (_isUsed)
             {
                 _sprite.color = Color.green;

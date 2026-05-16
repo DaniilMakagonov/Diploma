@@ -189,8 +189,10 @@ namespace Assets.Scripts.Components
 
         private void CharacterDeath()
         {
+            Debug.Log("Death");
             if (!AchievementsStorage.Check(_firstDeathAchievement))
             {
+                Debug.Log("achieved");
                 AchievementsStorage.Add(_firstDeathAchievement);
             }
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);

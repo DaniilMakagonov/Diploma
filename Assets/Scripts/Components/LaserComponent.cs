@@ -30,7 +30,6 @@ namespace Assets.Scripts.Components
                     if (health != null)
                     {
                         health.GetDamage(_attack);
-                        Debug.Log($"attacked from trap with damage {_attack.Damage}");
                     }
                     _damageTimer = _damageCooldown;
                 }

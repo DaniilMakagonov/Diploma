@@ -9,6 +9,6 @@ namespace Assets.Scripts.ScriptableObjects
     {
         [SerializeField] public string Description;
         [SerializeField] public Sprite Sprite;
-        public DateTime CompleteDate { get; set; }
+        [SerializeField] public string CompleteDate;
     }
 }

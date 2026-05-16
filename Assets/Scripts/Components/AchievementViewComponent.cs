@@ -18,7 +18,7 @@ namespace Assets.Scripts.Components
         public void InitiateView(Achievement achievement)
         {
             _description.text = achievement.Description;
-            _date.text = achievement.CompleteDate.Date.ToString("dd.MM.yyyy");
+            _date.text = achievement.CompleteDate;
             _image.sprite = achievement.Sprite;
         }
     }

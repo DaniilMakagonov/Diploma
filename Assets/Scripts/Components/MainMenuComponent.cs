@@ -40,6 +40,7 @@ namespace Assets.Scripts.Components
         public void StartNewGame()
         {
             Repository.ClearData();
+            AchievementsStorage.Load();
             SceneManager.LoadScene("Level 1");
         }
 

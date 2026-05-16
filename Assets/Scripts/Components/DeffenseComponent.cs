@@ -43,19 +43,16 @@ public class DeffenseComponent : MonoBehaviour
         if (attack.Element > DeffenseElement)
         {
             _health.LoseHealth(attack.Damage * 2);
-            Debug.Log($"get higher damage {attack.Damage * 2}");
             return;
         }
 
         if (attack.Element < DeffenseElement)
         {
             _health.LoseHealth(attack.Damage / 2);
-            Debug.Log($"get lower damage {attack.Damage / 2}");
             return;
         }
 
         _health.LoseHealth(attack.Damage);
-        Debug.Log($"get same damage {attack.Damage}");
     }
 
     public void GetHealth(int value)

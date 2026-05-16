@@ -36,7 +36,6 @@ namespace Assets.Scripts.Components
             if (health != null)
             {
                 health.GetDamage(_attack);
-                Debug.Log($"attacked from bullet with damage {_attack.Damage}");
             }
 
             Destroy(gameObject);

@@ -22,13 +22,14 @@ namespace Assets.Scripts.Data
 
         public static void Add(Achievement achievement)
         {
-            achievement.CompleteDate = DateTime.UtcNow;
+            achievement.CompleteDate = DateTime.UtcNow.ToString("dd.MM.yyyy");
             _achievements.Add(achievement);
             Save();
         }
 
         public static bool Check(Achievement achievement)
         {
+            UnityEngine.Debug.Log("achievs: "+_achievements.Count);
             return _achievements.Contains(achievement);
         }
     }

@@ -7,6 +7,6 @@ namespace Assets.Scripts.Data
     [System.Serializable]
     public class KeyInventoryData
     {
-        public HashSet<string> Keys = new();
+        public List<string> Keys = new();
     }
 }

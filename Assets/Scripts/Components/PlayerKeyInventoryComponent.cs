@@ -6,7 +6,7 @@ namespace Assets.Scripts.Components
 {
     public class PlayerKeyInventoryComponent : MonoBehaviour
     {
-        private HashSet<string> _collectedKeys;
+        private List<string> _collectedKeys;
 
         private void Awake()
         {

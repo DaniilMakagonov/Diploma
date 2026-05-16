@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a10338c556a834aacf134302a67faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeffenseComponent
-  <MaxHealth>k__BackingField: 20
+  <MaxHealth>k__BackingField: 100
   _deffenseElement: {fileID: 11400000, guid: d0e35cdd6a032a14f89f9b34f47bf963, type: 2}
 --- !u!50 &1091025097264213188
 Rigidbody2D:
@@ -369,6 +369,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8266326378335121249}
     m_Modifications:
+    - target: {fileID: 939399514731673753, guid: 83219a8d8f287074d8fadea1b6031047, type: 3}
+      propertyPath: _deffence
+      value: 
+      objectReference: {fileID: 6651136510813198757}
     - target: {fileID: 1704069011813259492, guid: 83219a8d8f287074d8fadea1b6031047, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
